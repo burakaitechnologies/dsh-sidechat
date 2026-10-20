@@ -6,7 +6,7 @@ This directory is a local adaptation of `@ahggg/dsh-side-chat@1.0.2`
 
 ## Metadata
 
-- `version`: `1.0.2-dsh0.2.1rc2.9` (local adaptation marker)
+- `version`: `1.0.2-dsh0.2.1rc2.10` (local adaptation marker)
 - `engines.dsh`: `0.2.1-rc.2`
 - DSH `peerDependencies` retargeted from `0.2.0-rc.2` to `0.2.1-rc.2`
 - `dsh.compatibility` / `dshCompatibility` declare `0.2.1-rc.2`
@@ -54,8 +54,11 @@ upstream build configuration, and every changed output file is overlaid from
   session id (and that the log prefix is contiguous) before admitting a
   discussion; the frozen context records the parent session id and
   `inheritedEvents` provenance (fork/branch seeds); a Host discussion bound to
-  another conversation is refused instead of answered. The panel header also
-  shows the parent conversation title so the bound conversation is visible.
+  another conversation is refused instead of answered.
+- The panel opens by default as a compact **top-right** panel (half the previous
+  width, two-thirds the previous height) while remembering any user-moved or
+  resized geometry per conversation. The header no longer prints the parent
+  session title (the panel always belongs to the conversation in view).
 - The panel draft takes focus only when the panel was opened from a text-entry
   context, so switching conversations no longer steals focus from the main
   composer; drag geometry is persisted even if the panel closes mid-drag and can

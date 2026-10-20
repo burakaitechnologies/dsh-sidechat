@@ -8,8 +8,6 @@ export interface SideChatPanelProps {
     readonly geometryStorageKey?: string | undefined;
     readonly embeddedConversation?: ReactNode;
     readonly modelControl?: ReactNode;
-    /** Parent conversation title, when known; makes the bound session visible. */
-    readonly parentTitle?: string | undefined;
     readonly onDraftChange: (draft: string) => void;
     readonly onFirstSend: (question: string) => Promise<SideChatActionResult<void>>;
     readonly onClose: () => Promise<SideChatActionResult<void>>;
@@ -20,4 +18,4 @@ export interface SideChatPanelProps {
     readonly addToConversationDisabled?: boolean;
     readonly onRemoveSelection?: () => void;
 }
-export declare function SideChatPanel({ state, locale, geometryStorageKey, embeddedConversation, modelControl, parentTitle, onDraftChange, onFirstSend, onClose, onRetry, onFocusParent, onRefresh, onAddToConversation, addToConversationDisabled, onRemoveSelection, }: SideChatPanelProps): import("react/jsx-runtime").JSX.Element;
+export declare function SideChatPanel({ state, locale, geometryStorageKey, embeddedConversation, modelControl, onDraftChange, onFirstSend, onClose, onRetry, onFocusParent, onRefresh, onAddToConversation, addToConversationDisabled, onRemoveSelection, }: SideChatPanelProps): import("react/jsx-runtime").JSX.Element;

@@ -25,10 +25,11 @@
   position: fixed;
   z-index: 70;
   right: clamp(12px, 2vw, 20px);
-  bottom: clamp(12px, 2vw, 20px);
+  top: clamp(64px, 9dvh, 96px);
+  bottom: auto;
   display: flex;
-  width: min(840px, calc(100vw - 32px));
-  height: clamp(460px, 62dvh, 980px);
+  width: min(420px, calc(100vw - 32px));
+  height: clamp(300px, 42dvh, 650px);
   max-height: calc(100dvh - 32px);
   min-width: 0;
   min-height: 0;
@@ -614,15 +615,6 @@ html[data-dsh-side-chat-interacting='resize'] { cursor: nwse-resize; }
 .dsh-side-chat-header[data-dsh-side-chat-drag-handle] .dsh-side-chat-heading { cursor: grab; }
 .dsh-side-chat-header[data-dsh-side-chat-drag-handle] .dsh-side-chat-heading:active { cursor: grabbing; }
 .dsh-side-chat-heading strong { font-size: 14px; font-weight: 600; }
-.dsh-side-chat-heading-parent {
-  max-width: 100%;
-  overflow: hidden;
-  color: var(--side-chat-muted);
-  font-size: 11px;
-  line-height: 1.2;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 .dsh-side-chat-footer { color: var(--side-chat-muted); font-size: 12px; }
 .dsh-side-chat-header button,
 .dsh-side-chat-inline-actions button,

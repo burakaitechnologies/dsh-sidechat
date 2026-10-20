@@ -273,7 +273,6 @@ export function SideChatOverlay({
   const modelDirectory = state.parentSessionId === undefined
     ? undefined
     : sessions.modelDirectory?.(state.parentSessionId)
-  const boundParentTitle = state.parentSessionId === undefined ? undefined : sessions.title?.(state.parentSessionId)
   const addToConversationDisabled = state.parentSessionId === undefined
     || state.chatId === undefined || state.phase !== 'ready'
     || !state.messages.some(message => message.role === 'assistant' && message.text.trim().length > 0)
@@ -432,7 +431,6 @@ export function SideChatOverlay({
           state={state}
           locale={locale}
           geometryStorageKey={geometryStorageKey}
-          {...boundParentTitle === undefined ? {} : { parentTitle: boundParentTitle }}
           embeddedConversation={<ReadOnlyConversation key={state.chatId}
             state={state} controller={controller} locale={locale} modelControl={modelControl} />}
           modelControl={modelControl}

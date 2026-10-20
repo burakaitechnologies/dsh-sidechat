@@ -183,6 +183,13 @@ try {
   check('per-session manager and geometry key are bundled',
     bundleSource.includes('dsh-side-chat.manager')
     && bundleSource.includes('dsh-side-chat.panel.geometry:'))
+  check('default panel is half width, shorter and top-anchored',
+    bundleSource.includes('width: min(420px, calc(100vw - 32px))')
+    && bundleSource.includes('height: clamp(300px, 42dvh, 650px)')
+    && bundleSource.includes('top: clamp(64px, 9dvh, 96px)'))
+  check('parent conversation title line is not rendered in the header',
+    !bundleSource.includes('dsh-side-chat-heading-parent')
+    && container.querySelector('.dsh-side-chat-heading-parent') === null)
 
   const refreshButton = container.querySelector('.dsh-side-chat-refresh')
   const addButton = container.querySelector('.dsh-side-chat-add-to-conversation')

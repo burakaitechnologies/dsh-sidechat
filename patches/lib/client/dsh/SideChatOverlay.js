@@ -243,7 +243,6 @@ export function SideChatOverlay({ controller, sessions, sessionId, geometryStora
     const modelDirectory = state.parentSessionId === undefined
         ? undefined
         : sessions.modelDirectory?.(state.parentSessionId);
-    const boundParentTitle = state.parentSessionId === undefined ? undefined : sessions.title?.(state.parentSessionId);
     const addToConversationDisabled = state.parentSessionId === undefined
         || state.chatId === undefined || state.phase !== 'ready'
         || !state.messages.some(message => message.role === 'assistant' && message.text.trim().length > 0);
@@ -361,7 +360,7 @@ export function SideChatOverlay({ controller, sessions, sessionId, geometryStora
                 }, onMoreDetails: () => { }, onAskInSideChat: () => { }, onDismiss: () => {
                     annotationEditing.current = false;
                     setEditingAnnotation(null);
-                } }, `annotation:${String(editingAnnotation.annotationIndex)}`)), state.phase !== 'closed' && (_jsx(SideChatPanel, { state: state, locale: locale, geometryStorageKey: geometryStorageKey, ...boundParentTitle === undefined ? {} : { parentTitle: boundParentTitle }, embeddedConversation: _jsx(ReadOnlyConversation, { state: state, controller: controller, locale: locale, modelControl: modelControl }, state.chatId), modelControl: modelControl, onDraftChange: (draft) => { controller.setDraft(draft); }, onFirstSend: (question) => controller.sendFirst(question), onClose: () => controller.close(), onRetry: () => controller.retry(), onFocusParent: () => {
+                } }, `annotation:${String(editingAnnotation.annotationIndex)}`)), state.phase !== 'closed' && (_jsx(SideChatPanel, { state: state, locale: locale, geometryStorageKey: geometryStorageKey, embeddedConversation: _jsx(ReadOnlyConversation, { state: state, controller: controller, locale: locale, modelControl: modelControl }, state.chatId), modelControl: modelControl, onDraftChange: (draft) => { controller.setDraft(draft); }, onFirstSend: (question) => controller.sendFirst(question), onClose: () => controller.close(), onRetry: () => controller.retry(), onFocusParent: () => {
                     if (state.parentSessionId !== undefined)
                         void sessions.openSession(state.parentSessionId);
                 }, onRefresh: () => {

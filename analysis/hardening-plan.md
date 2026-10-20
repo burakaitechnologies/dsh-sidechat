@@ -1,6 +1,6 @@
 # Side Chat fork — release-hardening plan and audit log (runtime `0.2.1-rc.2`)
 
-This document records the end-to-end audit performed for the `1.0.2-dsh0.2.1rc2.9`
+This document records the end-to-end audit performed for the `1.0.2-dsh0.2.1rc2.10`
 release: what was examined, what was found, what was fixed, and which gates a
 release must pass. It complements `analysis/build-validation.md` (build evidence),
 `analysis/compat-report.md` (DSH API compatibility) and `RELEASE.md` (publish
@@ -50,8 +50,7 @@ Make the plugin release-safe for public distribution:
 
 ### Low / polish
 
-- Header now shows the parent conversation title (a visibly wrong/stale binding is
-  obvious at a glance) and localized live-region announcements.
+- Localized live-region announcements.
 - Drag geometry persists when the panel unmounts mid-drag.
 - Refresh double-click during `closing` is a no-op instead of a warning.
 - `dispose()` bumps the model generation so a late model selection cannot write
@@ -79,6 +78,12 @@ Make the plugin release-safe for public distribution:
   panel with no notice (`lib/client/dsh/side-chat-command.js`); the
   expired-discussion message uses the transient level. Regression spec
   `tests/specs/client/side-chat-command.spec.ts`.
+- **rc2.10 — compact default panel / no session subtitle.** The default
+  (no remembered geometry) panel is now half the previous width, two-thirds the
+  previous height, anchored at the top-right instead of the bottom-right; the
+  parent-session title line under "Side Chat" was removed. User-moved/resized
+  geometry is untouched and double-click resets to the new default. The bundled
+  probe grew to 20 checks (default CSS tokens + no title line).
 
 ## Verified invariants
 

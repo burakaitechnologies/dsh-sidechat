@@ -106,7 +106,7 @@ function resizedGeometry(current, deltaX, deltaY) {
     }
     return clampGeometry({ x, y, width, height });
 }
-export function SideChatPanel({ state, locale = 'en', geometryStorageKey, embeddedConversation, modelControl, parentTitle, onDraftChange, onFirstSend, onClose, onRetry, onFocusParent, onRefresh, onAddToConversation, addToConversationDisabled, onRemoveSelection, }) {
+export function SideChatPanel({ state, locale = 'en', geometryStorageKey, embeddedConversation, modelControl, onDraftChange, onFirstSend, onClose, onRetry, onFocusParent, onRefresh, onAddToConversation, addToConversationDisabled, onRemoveSelection, }) {
     const messages = SIDE_CHAT_MESSAGES[locale];
     const storageKey = geometryStorageKey ?? GEOMETRY_STORAGE_KEY;
     const [submitting, setSubmitting] = useState(false);
@@ -265,7 +265,7 @@ export function SideChatPanel({ state, locale = 'en', geometryStorageKey, embedd
                 event.stopPropagation();
                 void onClose();
             }
-        }, children: [_jsx(SideChatHeader, { phase: state.phase, messages: messages, ...parentTitle === undefined ? {} : { parentTitle }, ...onAddToConversation === undefined ? {} : { onAddToConversation }, ...addToConversationDisabled === undefined ? {} : { addToConversationDisabled }, ...onRefresh === undefined ? {} : { onRefresh }, refreshDisabled: state.phase === 'closing', onDragStart: (event) => { beginInteraction('move', event); }, onResetPosition: resetPosition, onFocusParent: onFocusParent, onClose: () => { void onClose(); } }), state.error !== undefined && (_jsx(SideChatErrorState, { error: state.error, messages: messages, onRetry: () => { void onRetry(); } })), state.messages.length > 0 && embeddedConversation !== undefined
+        }, children: [_jsx(SideChatHeader, { phase: state.phase, messages: messages, ...onAddToConversation === undefined ? {} : { onAddToConversation }, ...addToConversationDisabled === undefined ? {} : { addToConversationDisabled }, ...onRefresh === undefined ? {} : { onRefresh }, refreshDisabled: state.phase === 'closing', onDragStart: (event) => { beginInteraction('move', event); }, onResetPosition: resetPosition, onFocusParent: onFocusParent, onClose: () => { void onClose(); } }), state.error !== undefined && (_jsx(SideChatErrorState, { error: state.error, messages: messages, onRetry: () => { void onRetry(); } })), state.messages.length > 0 && embeddedConversation !== undefined
                 ? _jsx(SideChatBody, { children: embeddedConversation })
                 : (_jsxs("form", { className: "dsh-side-chat-draft", "data-composer-card": "", onSubmit: (event) => { void submit(event); }, children: [state.selection !== undefined && (_jsx(SelectionQuote, { selections: [state.selection], messages: messages, ...onRemoveSelection === undefined ? {} : { onRemove: onRemoveSelection } })), _jsx("label", { htmlFor: "dsh-side-chat-draft-input", children: messages.placeholder }), _jsx("textarea", { id: "dsh-side-chat-draft-input", ref: draftRef, rows: 1, value: state.draft, disabled: ['creating', 'running', 'closing'].includes(state.phase), placeholder: messages.placeholder, onChange: (event) => { onDraftChange(event.target.value); }, onKeyDown: (event) => {
                                 if (event.key === 'Enter' && !event.shiftKey && !event.nativeEvent.isComposing

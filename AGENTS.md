@@ -49,7 +49,7 @@ when the panel closes unless the user adds it to the main composer.
    are not durable. Put durable built-file changes in `patches/` and durable
    source changes in `src-overlays/`.
 4. The folder path is load-bearing: the DSH profile depends on the current
-   `dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.9.tgz` inside this folder. If
+   `dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.10.tgz` inside this folder. If
    the folder is renamed or relocated, reinstall from the new path.
 5. Preserve the upstream MIT `LICENSE` and attribution. New code added here is
    a derivative of the MIT-licensed upstream project.
@@ -67,7 +67,7 @@ when the panel closes unless the user adds it to the main composer.
 | `dsh-side-chat/` | Generated adapted package DSH installs: `package.json` (re-targeted), `lib/` runtime, `cordis.patch.yml`, `locale/`, `icon.svg`, `ADAPTED.md`. |
 | `dist/` | Packed tarball of `dsh-side-chat/`; the file the DSH profile references. Only the current version's tarball should remain. |
 | `src-overlays/` | Durable source-level changes as full replacements under `upstream/source/src/**`, plus the reproducible build steps (`src-overlays/README.md`). Building them regenerates `patches/lib/**`. |
-| `patches/` | Durable built-file overlays applied last by the build script (27 files at rc2.9). `patches/README.md` explains the convention. |
+| `patches/` | Durable built-file overlays applied last by the build script (27 files at rc2.10). `patches/README.md` explains the convention. |
 | `upstream/` | Untouched upstream artifacts: npm tarball `1.0.2`, extracted package, GitHub source tree, source archive. |
 | `tests/` | Durable regression suite (`tests/specs/**` + `tests/bundle/verify-shipped-bundle.mjs`) run by `tools/test.mjs`; see `tests/README.md`. |
 | `tools/adapt-package.mjs` | The build: copies upstream package, patches metadata/display, overlays `patches/`, repacks `dist/`. |
@@ -86,7 +86,7 @@ when the panel closes unless the user adds it to the main composer.
   `%USERPROFILE%\.dsh\profiles\desktop`.
 - Profile dependency:
   `@ahggg/dsh-side-chat` ->
-  `file:C:/Users/ahmet/Desktop/deepseek/plugins/sidechat/dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.9.tgz`
+  `file:C:/Users/ahmet/Desktop/deepseek/plugins/sidechat/dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.10.tgz`
 - Bundle selection: `@ahggg/dsh-side-chat` is listed in the profile's
   `dsh.profile.bundles`; the bundle's `cordis.patch.yml` inserts the loader row
   `side-chat` (module `@ahggg/dsh-side-chat`).
@@ -98,7 +98,7 @@ when the panel closes unless the user adds it to the main composer.
   and never run pnpm in the profile directory.
 - Replacing the installed package requires `remove_bundle` and then
   `install_bundle`; installing over an already-installed package is refused.
-- Installed/active version right now: `1.0.2-dsh0.2.1rc2.9`.
+- Installed/active version right now: `1.0.2-dsh0.2.1rc2.10`.
 
 ## How the plugin works
 
@@ -186,7 +186,9 @@ when the panel closes unless the user adds it to the main composer.
   conversation is refused host-side (observation header id assertion) and
   client-side (create result assertion).
 - The panel (`lib/client/panel/SideChatPanel.js` + `SideChatHeader.js`) owns
-  plugin UI geometry: dragging anywhere on the header bar moves it (title
+  plugin UI geometry: when a conversation has no remembered geometry it opens as
+  a compact top-right panel (420px / half-width by default, two-thirds the old
+  height); dragging anywhere on the header bar moves it (title
   included; only the add-to-conversation and close buttons keep their click
   behavior, and a title drag suppresses the title's parent-view click), every
   edge and the top-left/bottom-right corners resize it (opposite edge anchored,
@@ -231,7 +233,7 @@ byte-identical to published 1.0.2.
    package (for example `patches/lib/client/selection/selection-normalizer.js`
    -> `dsh-side-chat/lib/client/selection/selection-normalizer.js`). The build
    overlays these last; see `patches/README.md`.
-2. Bump `PKG_VERSION` (for example `1.0.2-dsh0.2.1rc2.9`) so the installed
+2. Bump `PKG_VERSION` (for example `1.0.2-dsh0.2.1rc2.10`) so the installed
    version identifies the build, and describe the change in `ADAPTED.md` (patch
    that file from `patches/` or extend the generated text in the build script).
 3. Rebuild, reinstall, verify.
@@ -316,9 +318,9 @@ After any rebuild/reinstall:
    order:100, active:true}`. The `active` flag of a registration can differ
    while no panel is open; verify the occupants and then smoke-test the UI.
 5. **Automated gate** — `node tools/test.mjs` ends with `RESULT: PASS`:
-   28 test files / 192 tests (133 vendored upstream + 59 local), 18/18
+   28 test files / 192 tests (133 vendored upstream + 59 local), 20/20
    built-bundle probe checks, and built output byte-identical to
-   `dsh-side-chat/lib/**` (counts at rc2.9; keep them in sync).
+   `dsh-side-chat/lib/**` (counts at rc2.10; keep them in sync).
 6. **Interactive smoke test** (needs the user's authenticated DSH window;
    reload the page after reinstall; agents cannot open the authenticated GUI
    themselves because a fresh browser gets `dsh web authentication required`):
@@ -340,13 +342,12 @@ After any rebuild/reinstall:
      new question should answer from the latest parent context. Then open
      another main conversation: no panel (or that conversation's own panel if
      it has one) — the first conversation's chat must not float over it. Open a
-     side chat in the second conversation (the panel header shows that
-     conversation's title), put it somewhere else, switch back to the first:
-     its transcript, panel position, and size must be exactly as left; switch
-     again and the second one comes back. Refresh in the second conversation
-     and ask "what was the last thing I said?" — the answer must come from the
-     second conversation, never the first. The built-bundle jsdom probe
-     (`tests/bundle/verify-shipped-bundle.mjs`, 18/18 checks) covers Refresh
+     side chat in the second conversation, put it somewhere else, switch back
+     to the first: its transcript, panel position, and size must be exactly as
+     left; switch again and the second one comes back. Refresh in the second
+     conversation and ask "what was the last thing I said?" — the answer must
+     come from the second conversation, never the first. The built-bundle jsdom probe
+     (`tests/bundle/verify-shipped-bundle.mjs`, 20/20 checks) covers Refresh
      rendering/click, drag/resize, and per-session markers; the durable vitest
      specs in `tests/specs/**` cover the authoritative anchor, controller
      isolation, host identity guard, geometry, and refresh behavior.

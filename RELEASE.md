@@ -47,9 +47,10 @@ node tools/test.mjs
 
 Required result: **exit code 0** and a `RESULT: PASS` summary. Current baseline
 (after the session-identity/host-hardening overlays, the rc2.8 overlay-entry
-binding fix, and the rc2.9 composer-notice fix) is **28 test files / 192 tests
+binding fix, the rc2.9 composer-notice fix, and the rc2.10 panel default/title
+tweaks) is **28 test files / 192 tests
 passed (0 failed, 0 skipped)** — 133 upstream tests plus 59 local regression
-tests — and **18/18** built-bundle probe checks. The harness also
+tests — and **20/20** built-bundle probe checks. The harness also
 warns that the built output differs from the currently shipped
 `dsh-side-chat/` package until the new version (`PKG_VERSION` in
 `tools/adapt-package.mjs`) is rebuilt and reinstalled. The harness:

@@ -127,13 +127,14 @@ session services, and never hit the network or the live DSH runtime.
   post-rc2.6 session-identity/host-hardening work, the rc2.8 overlay-entry
   binding fix (the `sessionListSnapshot` accessor consumed by
   `useSyncExternalStore` must stay bound — a detached prototype method made the
-  root overlay component throw and DSH marked it inactive), and the rc2.9
+  root overlay component throw and DSH marked it inactive), the rc2.9
   composer-notice fix (`/side` on an already-open conversation focuses the
   panel instead of emitting a permanent DSH inline info notice; an expired
-  discussion uses the transient toast level). `PKG_VERSION` is
-  `1.0.2-dsh0.2.1rc2.9`, with `dsh-side-chat/` rebuilt and reinstalled at the
-  same version. `node tools/test.mjs` exited 0 with **28 test files / 192 tests
-  passed (0 failed, 0 skipped)** — 133 vendored upstream tests plus 59 local
-  regression tests in the ten `tests/specs/**` files — the built-bundle probe
-  passed **18/18 checks**, and the shipped-bundle probe passed 18/18 as an
-  advisory check.
+  discussion uses the transient toast level), and the rc2.10 panel default/title
+  tweaks (compact top-right default; no parent-session subtitle). `PKG_VERSION`
+  is `1.0.2-dsh0.2.1rc2.10`, with `dsh-side-chat/` rebuilt and reinstalled at
+  the same version. `node tools/test.mjs` exited 0 with **28 test files / 192
+  tests passed (0 failed, 0 skipped)** — 133 vendored upstream tests plus 59
+  local regression tests in the ten `tests/specs/**` files — the built-bundle
+  probe passed **20/20 checks**, and the shipped-bundle probe passed 20/20 as
+  an advisory check.

@@ -142,8 +142,6 @@ export interface SideChatPanelProps {
   readonly geometryStorageKey?: string | undefined
   readonly embeddedConversation?: ReactNode
   readonly modelControl?: ReactNode
-  /** Parent conversation title, when known; makes the bound session visible. */
-  readonly parentTitle?: string | undefined
   readonly onDraftChange: (draft: string) => void
   readonly onFirstSend: (question: string) => Promise<SideChatActionResult<void>>
   readonly onClose: () => Promise<SideChatActionResult<void>>
@@ -161,7 +159,6 @@ export function SideChatPanel({
   geometryStorageKey,
   embeddedConversation,
   modelControl,
-  parentTitle,
   onDraftChange,
   onFirstSend,
   onClose,
@@ -338,7 +335,6 @@ export function SideChatPanel({
       <SideChatHeader
         phase={state.phase}
         messages={messages}
-        {...parentTitle === undefined ? {} : { parentTitle }}
         {...onAddToConversation === undefined ? {} : { onAddToConversation }}
         {...addToConversationDisabled === undefined ? {} : { addToConversationDisabled }}
         {...onRefresh === undefined ? {} : { onRefresh }}

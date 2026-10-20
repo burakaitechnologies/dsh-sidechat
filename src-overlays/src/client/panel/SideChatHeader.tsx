@@ -35,7 +35,6 @@ function isHeaderActionButton(target: EventTarget | null): boolean {
 export function SideChatHeader({
   phase,
   messages,
-  parentTitle,
   addToConversationDisabled = false,
   onAddToConversation,
   onRefresh,
@@ -47,8 +46,6 @@ export function SideChatHeader({
 }: {
   readonly phase: SideChatPhase
   readonly messages: SideChatMessages
-  /** Parent conversation title, when known; makes the bound session visible. */
-  readonly parentTitle?: string | undefined
   readonly addToConversationDisabled?: boolean
   readonly onAddToConversation?: () => void
   readonly onRefresh?: () => void
@@ -87,9 +84,6 @@ export function SideChatHeader({
         }}
       >
         <strong>{messages.title}</strong>
-        {parentTitle !== undefined && parentTitle.length > 0 && (
-          <span className="dsh-side-chat-heading-parent" title={parentTitle}>{parentTitle}</span>
-        )}
       </button>
       <div className="dsh-side-chat-header-actions">
         {onRefresh !== undefined && (

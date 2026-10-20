@@ -473,3 +473,36 @@ A notice already stuck in a running page belongs to DSH's in-memory composer
 state; reload the page once after installing rc2.9 to clear it. The plugin no
 longer creates that notice.
 
+## Panel default/title polish (2026-10-20, build 1.0.2-dsh0.2.1rc2.10)
+
+Requested UI polish: the default panel (used when a conversation has no
+remembered geometry) is now half the previous width and two-thirds the previous
+height, anchored top-right instead of bottom-right; the parent-session title
+line under "Side Chat" was removed (the panel always belongs to the active
+conversation, and the title is still used for the Add-to-conversation
+reference). Stored per-conversation geometry is untouched; double-click resets
+to the new default.
+
+Implementation is CSS-only for the geometry (`.dsh-side-chat-panel` default
+rule) plus removal of the `parentTitle` prop chain and the
+`dsh-side-chat-heading-parent` style; the probe gained two checks (default
+geometry tokens, absence of the title line). No wire change.
+
+Verification:
+
+```text
+node tools/test.mjs → exit 0, RESULT: PASS
+28 test files / 192 tests: 192 passed, 0 failed, 0 skipped
+built-bundle jsdom probe: 20/20 checks passed
+built source and shipped package are byte-identical
+dsh-side-chat/ version: 1.0.2-dsh0.2.1rc2.10
+dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.10.tgz
+installed profile copy: 1.0.2-dsh0.2.1rc2.10, hash-identical to dsh-side-chat/
+live client Slots: shell.overlay occupant dsh-side-chat active:true
+lib/typert.js: byte-identical to published 1.0.2 (no wire change)
+```
+
+Note: the default size only applies to conversations that have no
+`dsh-side-chat.panel.geometry:<sessionId>` entry; existing panels keep their
+user-set position/size until the header is double-clicked (reset).
+

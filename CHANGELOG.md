@@ -8,6 +8,21 @@ is `PKG_VERSION` in `tools/adapt-package.mjs`; version labels below follow the
 history recorded in `analysis/build-validation.md` and
 `analysis/compat-report.md`.
 
+## 1.0.2-dsh0.2.1rc2.10 — compact default panel, no session subtitle
+
+- **Smaller default panel.** A conversation without remembered geometry now opens
+  the Side Chat at **half the previous width** (420px flex default instead of
+  840px) and **two-thirds the previous height** (42dvh/300–650px instead of
+  62dvh/460–980px), anchored at the **top-right** of the main area (previous
+  default was bottom-right). User-moved/resized geometry is untouched;
+  double-clicking the header resets to the new compact default.
+- **Removed the parent-session title line** under “Side Chat”. The panel always
+  belongs to the conversation currently in view, so the subtitle was redundant;
+  the title is still used when adding the discussion to the conversation as a
+  reference.
+- Built-bundle probe grew from 18 to **20 checks** (default geometry tokens +
+  no title line). Full gate: 28 test files / 192 tests, 20/20 probe checks.
+
 ## 1.0.2-dsh0.2.1rc2.9 — permanent composer notice fix
 
 - **"This conversation already has an open Side Chat." no longer sticks.** DSH
