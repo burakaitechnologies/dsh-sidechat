@@ -130,9 +130,10 @@ session services, and never hit the network or the live DSH runtime.
   root overlay component throw and DSH marked it inactive), the rc2.9
   composer-notice fix (`/side` on an already-open conversation focuses the
   panel instead of emitting a permanent DSH inline info notice; an expired
-  discussion uses the transient toast level), and the rc2.10 panel default/title
-  tweaks (compact top-right default; no parent-session subtitle). `PKG_VERSION`
-  is `1.0.2-dsh0.2.1rc2.10`, with `dsh-side-chat/` rebuilt and reinstalled at
+  discussion uses the transient toast level), and the rc2.10/rc2.11 panel
+  default/title tweaks (compact panel sitting right-aligned just above the
+  composer input; no parent-session subtitle). `PKG_VERSION`
+  is `1.0.2-dsh0.2.1rc2.11`, with `dsh-side-chat/` rebuilt and reinstalled at
   the same version. `node tools/test.mjs` exited 0 with **28 test files / 192
   tests passed (0 failed, 0 skipped)** — 133 vendored upstream tests plus 59
   local regression tests in the ten `tests/specs/**` files — the built-bundle

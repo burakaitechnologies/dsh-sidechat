@@ -8,6 +8,18 @@ is `PKG_VERSION` in `tools/adapt-package.mjs`; version labels below follow the
 history recorded in `analysis/build-validation.md` and
 `analysis/compat-report.md`.
 
+## 1.0.2-dsh0.2.1rc2.11 — composer-anchored default panel
+
+- **Default position corrected.** rc2.10 placed the compact default at the
+  top-right of the chat area; the intended anchor is the **top of the composer
+  input box**: the panel's bottom edge now sits 12px above the main
+  `[data-composer-seat]` and its right edge lines up with the composer's right
+  edge. The placement is re-measured while the composer or window resizes, with
+  a viewport-bottom fallback when the composer cannot be measured.
+- User-moved/resized geometry is still untouched; double-click resets to this
+  composer-anchored default. The bundled probe now simulates the composer and
+  asserts the alignment (still 20/20 checks; 28 files / 192 tests).
+
 ## 1.0.2-dsh0.2.1rc2.10 — compact default panel, no session subtitle
 
 - **Smaller default panel.** A conversation without remembered geometry now opens

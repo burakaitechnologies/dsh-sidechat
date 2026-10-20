@@ -142,8 +142,9 @@ describe('SideChatSessionsOverlay session switching', () => {
     const panelB = await findPanel(ctx.container)
     const headerB = panelB.querySelector('.dsh-side-chat-header')
     if (headerB === null) throw new Error('header missing')
-    // B has never been moved, so it starts unpositioned instead of reusing A's geometry.
-    expect(panelB.style.left).toBe('')
+    // B has never been moved, so it uses the default placement instead of A's geometry.
+    expect(panelB.style.left).not.toBe('')
+    expect(panelB.style.left).not.toBe('260px')
     await drag(headerB, { x: 500, y: 160 }, { x: 620, y: 200 }, 2)
     expect(JSON.parse(window.localStorage.getItem(`${GEOMETRY_PREFIX}${B}`) ?? 'null')).toMatchObject({ x: 320 })
     expect(JSON.parse(window.localStorage.getItem(`${GEOMETRY_PREFIX}${A}`) ?? 'null')).toMatchObject({ x: 260 })

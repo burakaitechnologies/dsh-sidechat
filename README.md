@@ -19,12 +19,12 @@ on other DSH versions (its host/client API use is audited only against that
 runtime).
 
 1. Install/update **DeepSeek Harness Desktop** to `0.2.1-rc.2`.
-2. Download `dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.10.tgz` from the GitHub
+2. Download `dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.11.tgz` from the GitHub
    Release (or build it locally, see below).
 3. Open DSH → **Plugins**: if an older `@ahggg/dsh-side-chat` is installed,
    remove it first, then install the tarball as a local bundle.
 4. Reload the DSH window once and check the Plugins page shows
-   `1.0.2-dsh0.2.1rc2.10`.
+   `1.0.2-dsh0.2.1rc2.11`.
 5. Open a conversation with at least one completed turn and type `/side` (or
    select text and use **Ask in side chat**).
 
@@ -56,7 +56,9 @@ refresh, add-to-conversation, and close buttons keep their click behavior) and
 handles (top-left and bottom-right). Its position/size are remembered **per
 conversation** in the browser (`localStorage`); double-click the header to
 reset. A conversation without remembered geometry opens the panel as a compact
-**top-right** panel (half the previous width and two-thirds the previous height).
+panel **just above the composer input box, right-aligned with it** (half the
+previous width and two-thirds the previous height); the position is re-measured
+while the composer or window resizes.
 
 The header's **Refresh** button discards the current side discussion and
 reopens a fresh draft for the same conversation — the next question gets a new
@@ -80,7 +82,7 @@ running if a reply was streaming. A session with no side chat shows no panel;
 | --- | --- |
 | `AGENTS.md` | Orientation and working rules for AI agent sessions that use this folder as their workspace. |
 | `dsh-side-chat/` | The adapted plugin package (what DSH installs). `lib/` is the built runtime; `package.json` is re-targeted for DSH 0.2.1-rc.2 with `engines.dsh`; `locale/` + `icon.svg` add Plugins-page display metadata. See `dsh-side-chat/ADAPTED.md`. |
-| `dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.10.tgz` | Packed tarball of `dsh-side-chat/`. This is the file the DSH profile references; keep it in sync with `dsh-side-chat/` (rebuild with the script below). |
+| `dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.11.tgz` | Packed tarball of `dsh-side-chat/`. This is the file the DSH profile references; keep it in sync with `dsh-side-chat/` (rebuild with the script below). |
 | `upstream/` | Unmodified upstream artifacts: published npm tarball `1.0.2`, its extracted package, the GitHub source tree, and the source archive. Never edit. |
 | `src-overlays/` | Durable source-level changes on top of the upstream TypeScript snapshot (the `/side` command, latest-context cut, drag/resize panel, per-conversation identity and host hardening). Full replacements, plus the reproducible build steps. |
 | `patches/` | Built-file overlays applied to the package generated from `upstream/package` (applied last, so they win). See `patches/README.md`. |
@@ -101,7 +103,7 @@ match the running runtime, so a straight install on DSH 0.2.1-rc.2 was
 refused. The audit (`analysis/compat-report.md`) showed every host and client
 API the plugin uses still exists in 0.2.1-rc.2. This copy therefore changes:
 
-- metadata — `version` → `1.0.2-dsh0.2.1rc2.10`, `engines.dsh` →
+- metadata — `version` → `1.0.2-dsh0.2.1rc2.11`, `engines.dsh` →
   `0.2.1-rc.2`, DSH peer/dev versions, `dsh.compatibility` /
   `dshCompatibility`, added `locale/*.json` + `icon.svg`, and added
   `@deepseek-ai/dsh-client-ui-commands` to `dsh.client.inject` (boot order for
@@ -146,7 +148,7 @@ first, then install the new tarball.
 The installed profile dependency is:
 
 ```text
-@ahggg/dsh-side-chat -> file:C:/Users/ahmet/Desktop/deepseek/plugins/sidechat/dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.10.tgz
+@ahggg/dsh-side-chat -> file:C:/Users/ahmet/Desktop/deepseek/plugins/sidechat/dist/ahggg-dsh-side-chat-1.0.2-dsh0.2.1rc2.11.tgz
 ```
 
 Moving or renaming this folder would break that path; either keep it here or

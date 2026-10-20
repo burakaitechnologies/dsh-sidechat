@@ -47,8 +47,8 @@ node tools/test.mjs
 
 Required result: **exit code 0** and a `RESULT: PASS` summary. Current baseline
 (after the session-identity/host-hardening overlays, the rc2.8 overlay-entry
-binding fix, the rc2.9 composer-notice fix, and the rc2.10 panel default/title
-tweaks) is **28 test files / 192 tests
+binding fix, the rc2.9 composer-notice fix, and the rc2.10/rc2.11 compact
+composer-anchored panel default) is **28 test files / 192 tests
 passed (0 failed, 0 skipped)** — 133 upstream tests plus 59 local regression
 tests — and **20/20** built-bundle probe checks. The harness also
 warns that the built output differs from the currently shipped

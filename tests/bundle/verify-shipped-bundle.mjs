@@ -128,6 +128,15 @@ const props = {
 }
 const container = document.getElementById('root')
 const root = createRoot(container)
+// Simulate the main composer so the default panel placement (right-aligned,
+// bottom edge just above the input box) can be asserted.
+const composerSeat = window.document.createElement('div')
+composerSeat.setAttribute('data-composer-seat', '')
+composerSeat.getBoundingClientRect = () => ({
+  left: 302, top: 700, right: 1002, bottom: 760, width: 700, height: 60, x: 302, y: 700,
+  toJSON: () => ({}),
+})
+window.document.body.appendChild(composerSeat)
 
 function pointerEvent(type, options) {
   const event = new window.MouseEvent(type, { bubbles: true, cancelable: true, ...options })
@@ -183,10 +192,13 @@ try {
   check('per-session manager and geometry key are bundled',
     bundleSource.includes('dsh-side-chat.manager')
     && bundleSource.includes('dsh-side-chat.panel.geometry:'))
-  check('default panel is half width, shorter and top-anchored',
-    bundleSource.includes('width: min(420px, calc(100vw - 32px))')
-    && bundleSource.includes('height: clamp(300px, 42dvh, 650px)')
-    && bundleSource.includes('top: clamp(64px, 9dvh, 96px)'))
+  check('default panel is compact and sits right-aligned just above the composer', (() => {
+    const left = Number.parseFloat(panel.style.left)
+    const top = Number.parseFloat(panel.style.top)
+    const width = Number.parseFloat(panel.style.width)
+    const height = Number.parseFloat(panel.style.height)
+    return width === 420 && left + width === 1002 && Math.abs(top + height - 688) < 0.01
+  })(), `${panel.style.left} ${panel.style.top} ${panel.style.width} ${panel.style.height}`)
   check('parent conversation title line is not rendered in the header',
     !bundleSource.includes('dsh-side-chat-heading-parent')
     && container.querySelector('.dsh-side-chat-heading-parent') === null)
@@ -252,9 +264,11 @@ try {
     `${panel.style.width} ${panel.style.height}`)
 
   await tick(() => header.dispatchEvent(new window.MouseEvent('dblclick', { bubbles: true })))
-  check('double-click resets geometry', panel.style.left === '' && panel.style.width === ''
+  check('double-click resets to the compact composer-anchored default',
+    panel.style.left === '582px' && panel.style.top === '365px'
+    && panel.style.width === '420px' && panel.style.height === '323px'
     && window.localStorage.getItem(GEOMETRY_KEY) === null,
-    `${panel.style.left} ${panel.style.width}`)
+    `${panel.style.left} ${panel.style.top} ${panel.style.width} ${panel.style.height}`)
 } catch (error) {
   results.push({ name: 'harness', ok: false, detail: error instanceof Error ? error.stack : String(error) })
 }

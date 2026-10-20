@@ -506,3 +506,29 @@ Note: the default size only applies to conversations that have no
 `dsh-side-chat.panel.geometry:<sessionId>` entry; existing panels keep their
 user-set position/size until the header is double-clicked (reset).
 
+## Composer-anchored default correction (2026-10-21, build 1.0.2-dsh0.2.1rc2.11)
+
+rc2.10 initially anchored the compact default to the top-right of the chat
+area. The intended placement is the **top edge of the composer input box**:
+the panel bottom sits 12px above the main composer (`[data-composer-seat]`) and
+its right edge aligns with the composer's right edge. Implemented in
+`SideChatPanel` with a `defaultPanelGeometry()` measurement (fallback to a
+viewport-bottom offset when no composer is measurable), re-measured via a
+`resize` listener, a `ResizeObserver` on composer seats, and a low-frequency
+recheck while no user geometry exists; user-moved/resized geometry is untouched.
+The built-bundle probe creates a fake composer seat and asserts width 420px,
+right-edge alignment and the 12px gap (still 20/20 checks).
+
+Verification:
+
+```text
+node tools/test.mjs → exit 0, RESULT: PASS
+28 test files / 192 tests: 192 passed, 0 failed, 0 skipped
+built-bundle jsdom probe: 20/20 checks passed
+built source and shipped package are byte-identical
+dsh-side-chat/ version: 1.0.2-dsh0.2.1rc2.11
+installed profile copy: 1.0.2-dsh0.2.1rc2.11, hash-identical to dsh-side-chat/
+live client Slots: shell.overlay occupant dsh-side-chat active:true
+lib/typert.js: byte-identical to published 1.0.2 (no wire change)
+```
+

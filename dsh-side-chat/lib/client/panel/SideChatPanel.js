@@ -11,6 +11,12 @@ const GEOMETRY_STORAGE_KEY = 'dsh-side-chat.panel.geometry';
 const MIN_PANEL_WIDTH = 360;
 const MIN_PANEL_HEIGHT = 280;
 const VIEWPORT_MARGIN = 8;
+const DEFAULT_PANEL_WIDTH = 420;
+const DEFAULT_PANEL_HEIGHT_RATIO = 0.42;
+const MIN_DEFAULT_HEIGHT = 300;
+const MAX_DEFAULT_HEIGHT = 650;
+/** Gap between the default panel's bottom edge and the main composer's top edge. */
+const COMPOSER_GAP = 12;
 /** Keep the panel inside the viewport and above the usable minimum size. */
 function clampGeometry(geometry) {
     const viewportWidth = window.innerWidth;
@@ -68,6 +74,48 @@ function clearPanelGeometry(storageKey) {
     catch { /* Geometry persistence is best-effort; the panel still works without storage. */ }
 }
 /**
+ * The main conversation's composer seat (`data-composer-seat`) while it is
+ * visible. The subagent sidebar can mount a second composer, so pick the widest
+ * visible one (the main column).
+ */
+function mainComposerRect() {
+    if (typeof document === 'undefined')
+        return undefined;
+    let best;
+    for (const seat of document.querySelectorAll('[data-composer-seat]')) {
+        const rect = seat.getBoundingClientRect();
+        if (rect.width <= 0 || rect.height <= 0)
+            continue;
+        if (best === undefined || rect.width > best.width)
+            best = { top: rect.top, right: rect.right, width: rect.width };
+    }
+    return best === undefined ? undefined : { top: best.top, right: best.right };
+}
+/**
+ * Default placement for a conversation with no remembered geometry: a compact
+ * panel whose bottom edge sits just above the composer input box and whose right
+ * edge lines up with that composer's right edge. Falls back to a viewport
+ * bottom offset when the composer cannot be measured (e.g. jsdom/boot races).
+ */
+function defaultPanelGeometry() {
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    const margin = Math.min(20, Math.max(VIEWPORT_MARGIN, Math.round(viewportWidth * 0.02)));
+    const width = Math.min(DEFAULT_PANEL_WIDTH, Math.max(1, viewportWidth - margin * 2));
+    const composer = mainComposerRect();
+    const fallbackComposerHeight = Math.min(240, Math.max(140, Math.round(viewportHeight * 0.18)));
+    const composerTop = composer?.top ?? (viewportHeight - fallbackComposerHeight);
+    const composerRight = Math.min(composer?.right ?? (viewportWidth - margin), viewportWidth - margin);
+    const availableAbove = composerTop - COMPOSER_GAP;
+    const height = Math.min(Math.max(MIN_DEFAULT_HEIGHT, Math.round(viewportHeight * DEFAULT_PANEL_HEIGHT_RATIO)), MAX_DEFAULT_HEIGHT, Math.max(MIN_PANEL_HEIGHT, availableAbove - VIEWPORT_MARGIN));
+    const x = Math.min(Math.max(composerRight - width, VIEWPORT_MARGIN), Math.max(VIEWPORT_MARGIN, viewportWidth - width - VIEWPORT_MARGIN));
+    const y = Math.max(VIEWPORT_MARGIN, availableAbove - height);
+    return clampGeometry({ x, y, width, height });
+}
+function sameGeometry(a, b) {
+    return a !== undefined && a.x === b.x && a.y === b.y && a.width === b.width && a.height === b.height;
+}
+/**
  * Geometry for one resize edge or corner. The opposite edge(s) stay anchored:
  * dragging the left edge moves `x` while keeping the right edge fixed, and so on.
  */
@@ -111,6 +159,7 @@ export function SideChatPanel({ state, locale = 'en', geometryStorageKey, embedd
     const storageKey = geometryStorageKey ?? GEOMETRY_STORAGE_KEY;
     const [submitting, setSubmitting] = useState(false);
     const [geometry, setGeometry] = useState(() => loadPanelGeometry(storageKey));
+    const [defaultGeometry, setDefaultGeometry] = useState(() => loadPanelGeometry(storageKey) === undefined ? defaultPanelGeometry() : undefined);
     const draftRef = useAutoGrowingTextarea(state.draft);
     const panelRef = useRef(null);
     const interactionRef = useRef(null);
@@ -131,6 +180,42 @@ export function SideChatPanel({ state, locale = 'en', geometryStorageKey, embedd
         window.addEventListener('resize', onWindowResize);
         return () => window.removeEventListener('resize', onWindowResize);
     }, []);
+    // A conversation without remembered geometry hangs just above the composer
+    // input box, right-aligned with it. Re-measure when the window, the composer
+    // or the surrounding layout changes; stop once the user drags/resizes it.
+    useEffect(() => {
+        if (geometry !== undefined) {
+            setDefaultGeometry(undefined);
+            return;
+        }
+        let frame = 0;
+        const update = () => {
+            const next = defaultPanelGeometry();
+            setDefaultGeometry(current => sameGeometry(current, next) ? current : next);
+        };
+        const schedule = () => {
+            if (frame !== 0)
+                return;
+            frame = window.requestAnimationFrame(() => { frame = 0; update(); });
+        };
+        update();
+        window.addEventListener('resize', schedule);
+        let observer;
+        if (typeof ResizeObserver !== 'undefined') {
+            observer = new ResizeObserver(schedule);
+            for (const seat of document.querySelectorAll('[data-composer-seat]'))
+                observer.observe(seat);
+        }
+        // The composer can move without a size change (sidebar/layout toggles).
+        const timer = window.setInterval(update, 500);
+        return () => {
+            window.removeEventListener('resize', schedule);
+            if (frame !== 0)
+                window.cancelAnimationFrame(frame);
+            observer?.disconnect();
+            window.clearInterval(timer);
+        };
+    }, [geometry]);
     // Adopt this conversation's geometry whenever the storage key changes (the
     // overlay normally remounts per conversation, this also covers reused hosts).
     useEffect(() => {
@@ -239,13 +324,14 @@ export function SideChatPanel({ state, locale = 'en', geometryStorageKey, embedd
         clearPanelGeometry(storageKey);
         setGeometry(undefined);
     };
-    const style = geometry === undefined ? undefined : {
-        left: `${String(geometry.x)}px`,
-        top: `${String(geometry.y)}px`,
+    const effectiveGeometry = geometry ?? defaultGeometry;
+    const style = effectiveGeometry === undefined ? undefined : {
+        left: `${String(effectiveGeometry.x)}px`,
+        top: `${String(effectiveGeometry.y)}px`,
         right: 'auto',
         bottom: 'auto',
-        width: `${String(geometry.width)}px`,
-        height: `${String(geometry.height)}px`,
+        width: `${String(effectiveGeometry.width)}px`,
+        height: `${String(effectiveGeometry.height)}px`,
     };
     const submit = async (event) => {
         event.preventDefault();

@@ -25,8 +25,8 @@
   position: fixed;
   z-index: 70;
   right: clamp(12px, 2vw, 20px);
-  top: clamp(64px, 9dvh, 96px);
-  bottom: auto;
+  top: auto;
+  bottom: clamp(160px, 22dvh, 240px);
   display: flex;
   width: min(420px, calc(100vw - 32px));
   height: clamp(300px, 42dvh, 650px);

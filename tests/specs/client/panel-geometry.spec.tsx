@@ -131,7 +131,8 @@ describe('Side Chat panel geometry and header actions', () => {
     first.unmount()
 
     const second = renderPanel({ geometryStorageKey: KEY_B })
-    expect(second.panel.style.left).toBe('')
+    expect(second.panel.style.left).not.toBe('')
+    expect(second.panel.style.left).not.toBe('260px')
     await drag(second.header, { x: 500, y: 160 }, { x: 600, y: 200 })
     expect(JSON.parse(window.localStorage.getItem(KEY_B) ?? 'null')).toMatchObject({ x: 300 })
     expect(JSON.parse(window.localStorage.getItem(KEY_A) ?? 'null')).toMatchObject({ x: 260 })
@@ -156,7 +157,8 @@ describe('Side Chat panel geometry and header actions', () => {
     const { panel, header } = renderPanel({ geometryStorageKey: KEY_A })
     expect(panel.style.left).toBe('200px')
     fireEvent.doubleClick(header)
-    expect(panel.style.left).toBe('')
+    expect(panel.style.left).not.toBe('200px')
+    expect(panel.style.left).not.toBe('')
     expect(window.localStorage.getItem(KEY_A)).toBeNull()
     expect(window.localStorage.getItem(KEY_B)).not.toBeNull()
   })
@@ -179,7 +181,7 @@ describe('Side Chat panel geometry and header actions', () => {
     setRect(panel)
     await clickHeading(heading, { x: 300, y: 170 })
     expect(onFocusParent).toHaveBeenCalledOnce()
-    expect(panel.style.left).toBe('')
+    expect(panel.style.left).not.toBe('')
     expect(window.localStorage.getItem(KEY_A)).toBeNull()
     // A real drag of the header must move the panel instead of opening the parent.
     await drag(header, { x: 500, y: 160 }, { x: 560, y: 200 }, 2)
@@ -213,7 +215,8 @@ describe('Side Chat panel geometry and header actions', () => {
 
   it('adopts geometry written by another tab through the storage event', () => {
     const { panel } = renderPanel({ geometryStorageKey: KEY_A })
-    expect(panel.style.left).toBe('')
+    expect(panel.style.left).not.toBe('')
+    expect(panel.style.left).not.toBe('40px')
     window.localStorage.setItem(KEY_A, JSON.stringify({ x: 40, y: 50, width: 480, height: 360 }))
     fireEvent(window, new window.StorageEvent('storage', { key: KEY_A }))
     expect(panel.style.left).toBe('40px')

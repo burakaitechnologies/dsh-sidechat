@@ -12,7 +12,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'upstream', 'package');
 const OUT_DIR = path.join(ROOT, 'dsh-side-chat');
 const DIST = path.join(ROOT, 'dist');
-const PKG_VERSION = '1.0.2-dsh0.2.1rc2.10';
+const PKG_VERSION = '1.0.2-dsh0.2.1rc2.11';
 const DSH_VERSION = '0.2.1-rc.2';
 
 rmSync(OUT_DIR, { recursive: true, force: true });
@@ -174,10 +174,12 @@ upstream build configuration, and every changed output file is overlaid from
   discussion; the frozen context records the parent session id and
   \`inheritedEvents\` provenance (fork/branch seeds); a Host discussion bound to
   another conversation is refused instead of answered.
-- The panel opens by default as a compact **top-right** panel (half the previous
-  width, two-thirds the previous height) while remembering any user-moved or
-  resized geometry per conversation. The header no longer prints the parent
-  session title (the panel always belongs to the conversation in view).
+- The panel opens by default as a compact panel **just above the main composer
+  input box, right-aligned with that input box** (half the previous width,
+  two-thirds the previous height), re-measured while the composer/window
+  resizes, while remembering any user-moved or resized geometry per
+  conversation. The header no longer prints the parent session title (the panel
+  always belongs to the conversation in view).
 - The panel draft takes focus only when the panel was opened from a text-entry
   context, so switching conversations no longer steals focus from the main
   composer; drag geometry is persisted even if the panel closes mid-drag and can
