@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Side Chat">
+  <rect x="3" y="5" width="20" height="16" rx="5" fill="#4C6FFF"/>
+  <path d="M8 21v5l6-5" fill="#4C6FFF"/>
+  <rect x="8" y="10" width="10" height="2" rx="1" fill="#fff"/>
+  <rect x="8" y="14" width="7" height="2" rx="1" fill="#fff"/>
+  <rect x="21" y="13" width="8" height="12" rx="4" fill="#B9C6FF"/>
+  <path d="M25 25v4l-4-4" fill="#B9C6FF"/>
+  <circle cx="25" cy="17" r="1.4" fill="#fff"/>
+  <circle cx="25" cy="21" r="1.4" fill="#fff"/>
+</svg>

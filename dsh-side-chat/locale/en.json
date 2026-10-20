@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Side Chat",
+    "description": "Ask focused follow-ups in a side panel: select text, or run /side to discuss the latest conversation context, without interrupting the main chat."
+  }
+}
